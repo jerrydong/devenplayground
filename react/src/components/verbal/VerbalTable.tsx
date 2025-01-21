@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
-import type { VerbalItem } from '../../types/api';
+import type { VerbalItem, VerbalQueryRequest } from '../../types/api';
 import type { TablePaginationConfig } from 'antd/es/table';
 
-export const VerbalTable = () => {
+interface VerbalTableProps {
+  loading?: boolean;
+  data: VerbalItem[];
+  total: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  onSearch: (values: VerbalQueryRequest) => Promise<void>;
+}
+
+export const VerbalTable: React.FC<VerbalTableProps> = ({
+  loading,
+  data,
+  total,
+  currentPage,
+  onPageChange,
+  onSearch,
+}) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [crossPageSelected, setCrossPageSelected] = useState(false);
 
@@ -58,9 +74,14 @@ export const VerbalTable = () => {
   };
 
   const pagination: TablePaginationConfig = {
-    total: 0, // Will be updated when we implement data fetching
+    current: currentPage,
+    total,
     pageSize: 50,
     showSizeChanger: false,
+    onChange: (page) => {
+      onPageChange(page);
+      onSearch({ page, pageSize: 50 });
+    },
   };
 
   return (
@@ -97,7 +118,8 @@ export const VerbalTable = () => {
       <Table
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={[]}
+        dataSource={data}
+        loading={loading}
         rowKey="id"
         pagination={pagination}
       />

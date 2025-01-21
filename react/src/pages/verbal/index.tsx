@@ -1,18 +1,55 @@
-import React from 'react';
-import { Layout } from 'antd';
+import React, { useState } from 'react';
+import { Layout, message } from 'antd';
 import { SearchForm } from '../../components/verbal/SearchForm';
 import { VerbalTable } from '../../components/verbal/VerbalTable';
+import { api } from '../../services/api';
+import type { VerbalItem, VerbalQueryRequest } from '../../types/api';
 
 const { Content } = Layout;
 
 const VerbalPage = () => {
+  const [loading, setLoading] = useState(false);
+  const [verbals, setVerbals] = useState<VerbalItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 50;
+
+  const handleSearch = async (values: VerbalQueryRequest) => {
+    try {
+      setLoading(true);
+      const response = await api.queryVerbals({
+        ...values,
+        page: currentPage,
+        pageSize,
+      });
+      if (response.code === 0) {
+        setVerbals(response.data.verbalList);
+        setTotal(response.data.total);
+      } else {
+        message.error(response.msg || '查询失败');
+      }
+    } catch (error) {
+      message.error('查询失败，请稍后重试');
+      console.error('Search error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Layout className="min-h-screen">
       <Content className="p-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <SearchForm />
+          <SearchForm onSearch={handleSearch} loading={loading} />
           <div className="mt-6">
-            <VerbalTable />
+            <VerbalTable 
+              loading={loading}
+              data={verbals}
+              total={total}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onSearch={handleSearch}
+            />
           </div>
         </div>
       </Content>
