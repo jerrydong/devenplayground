@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import Mock from 'mockjs';
 import type { 
   VerbalItem, 
   VerbalQueryResponse, 
@@ -30,9 +31,26 @@ export const handlers = [
     const creator = url.searchParams.get('creator');
     const owner = url.searchParams.get('owner');
 
-    // Generate fresh mock data for each request
+    // Generate consistent mock data using a seed
+    Mock.Random.seed(123);
     const verbals = generateMockList<VerbalItem>(verbalItemTemplate, 50);
-    let filteredVerbals = [...verbals];
+    Mock.Random.seed(); // Reset seed
+    
+    // Map the verbals to have consistent, searchable names
+    const mappedVerbals = verbals.map((verbal, index) => ({
+      ...verbal,
+      name: `话术${String(index + 1).padStart(3, '0')}`,
+      contentList: [{
+        id: verbal.contentList[0].id,
+        content: `这是第${index + 1}条话术的示例内容，包含了完整的对话场景和回复建议。${
+          index % 3 === 0 ? '适用于客服咨询场景。' :
+          index % 3 === 1 ? '用于产品介绍和功能说明。' :
+          '针对售后服务和问题处理。'
+        }`
+      }]
+    }));
+    
+    let filteredVerbals = [...mappedVerbals];
 
     // Apply filters
     if (verbalName) {
