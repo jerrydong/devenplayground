@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
+import { LinkOutlined, UserOutlined, DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
 import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest } from '../../types/api';
 import type { TablePaginationConfig } from 'antd/es/table';
 
@@ -134,21 +135,33 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
       <div className="mb-4 flex justify-end">
         <Space>
           <Button
-            disabled={selectedRowKeys.length === 0}
+            disabled={selectedRowKeys.length === 0 && !crossPageSelected}
+            type="primary"
+            icon={<DatabaseOutlined />}
             onClick={() => onBatchModifyDataset?.(prepareBatchPayload('dataset'))}
           >
             绑定数据集
           </Button>
           <Button
-            disabled={selectedRowKeys.length === 0}
+            disabled={selectedRowKeys.length === 0 && !crossPageSelected}
+            type="primary"
+            icon={<UserOutlined />}
             onClick={() => onBatchModifyOwner?.(prepareBatchPayload('owner'))}
           >
             修改负责人
           </Button>
-          <Button onClick={() => console.log('Import verbal')}>
+          <Button 
+            type="default"
+            icon={<LinkOutlined />}
+            onClick={() => console.log('Import verbal')}
+          >
             导入学城话术
           </Button>
-          <Button onClick={() => console.log('Add verbal')}>
+          <Button 
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => console.log('Add verbal')}
+          >
             新增话术
           </Button>
         </Space>
