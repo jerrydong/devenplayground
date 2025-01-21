@@ -5,6 +5,8 @@ import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest } from '../../t
 import type { TablePaginationConfig } from 'antd/es/table';
 import { BindDatasetModal } from './modals/BindDatasetModal';
 import { ModifyOwnerModal } from './modals/ModifyOwnerModal';
+import { ImportVerbalModal } from './modals/ImportVerbalModal';
+import { AddEditVerbalModal } from './modals/AddEditVerbalModal';
 
 interface VerbalTableProps {
   loading?: boolean;
@@ -33,6 +35,9 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
   const [crossPageSelected, setCrossPageSelected] = useState(false);
   const [bindDatasetModalOpen, setBindDatasetModalOpen] = useState(false);
   const [modifyOwnerModalOpen, setModifyOwnerModalOpen] = useState(false);
+  const [importVerbalModalOpen, setImportVerbalModalOpen] = useState(false);
+  const [addEditModalOpen, setAddEditModalOpen] = useState(false);
+  const [editingVerbal, setEditingVerbal] = useState<VerbalItem | undefined>();
   const filterValues = searchValues;
 
   // Helper function to prepare batch request payload
@@ -89,7 +94,13 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
       key: 'action',
       render: (_: unknown, record: VerbalItem) => (
         <Space size="middle">
-          <Button type="link" onClick={() => console.log('Edit:', record)}>
+          <Button 
+            type="link" 
+            onClick={() => {
+              setEditingVerbal(record);
+              setAddEditModalOpen(true);
+            }}
+          >
             编辑
           </Button>
         </Space>
@@ -157,14 +168,17 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
           <Button 
             type="default"
             icon={<LinkOutlined />}
-            onClick={() => console.log('Import verbal')}
+            onClick={() => setImportVerbalModalOpen(true)}
           >
             导入学城话术
           </Button>
           <Button 
             type="primary"
             icon={<PlusOutlined />}
-            onClick={() => console.log('Add verbal')}
+            onClick={() => {
+              setEditingVerbal(undefined);
+              setAddEditModalOpen(true);
+            }}
           >
             新增话术
           </Button>
@@ -189,6 +203,21 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
         onClose={() => setModifyOwnerModalOpen(false)}
         onConfirm={onBatchModifyOwner!}
         basePayload={prepareBatchPayload('owner')}
+      />
+      <ImportVerbalModal
+        open={importVerbalModalOpen}
+        onClose={() => setImportVerbalModalOpen(false)}
+        onSuccess={() => onSearch({ ...filterValues, page: currentPage, pageSize: 50 })}
+      />
+      <AddEditVerbalModal
+        open={addEditModalOpen}
+        onClose={() => {
+          setAddEditModalOpen(false);
+          setEditingVerbal(undefined);
+        }}
+        onSuccess={() => onSearch({ ...filterValues, page: currentPage, pageSize: 50 })}
+        type={editingVerbal ? 'edit' : 'add'}
+        initialValues={editingVerbal}
       />
     </div>
   );
