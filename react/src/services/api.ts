@@ -10,7 +10,7 @@ import {
   VerbalNameValidResponse
 } from '../types/api';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const BASE_URL = '/api';
 
 export const api = {
   // Query verbals with pagination
