@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, message } from 'antd';
 import { SearchForm } from '../../components/verbal/SearchForm';
 import { VerbalTable } from '../../components/verbal/VerbalTable';
 import { api } from '../../services/api';
-import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest } from '../../types/api';
+import type { VerbalItem, VerbalQueryRequest } from '../../types/api';
 
 const { Content } = Layout;
 
@@ -15,15 +15,10 @@ const VerbalPage = () => {
   const [searchValues, setSearchValues] = useState<Partial<VerbalQueryRequest>>({});
   const pageSize = 50;
 
-  const handleSearch = async (values: Partial<VerbalQueryRequest>) => {
+  const fetchData = async (params: VerbalQueryRequest) => {
     try {
       setLoading(true);
-      setSearchValues(values);
-      const response = await api.queryVerbals({
-        ...values,
-        page: currentPage,
-        pageSize,
-      } as VerbalQueryRequest);
+      const response = await api.queryVerbals(params);
       if (response.code === 0) {
         setVerbals(response.data.verbalList);
         setTotal(response.data.total);
@@ -32,10 +27,20 @@ const VerbalPage = () => {
       }
     } catch (error) {
       message.error('查询失败，请稍后重试');
-      console.error('Search error:', error);
+      console.error('Fetch error:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchData({ page: 1, pageSize });
+  }, []);
+
+  const handleSearch = async (values: Partial<VerbalQueryRequest>): Promise<void> => {
+    setSearchValues(values);
+    setCurrentPage(1);
+    await fetchData({ ...values, page: 1, pageSize } as VerbalQueryRequest);
   };
 
   return (
@@ -50,7 +55,7 @@ const VerbalPage = () => {
               total={total}
               currentPage={currentPage}
               onPageChange={setCurrentPage}
-              onSearch={handleSearch}
+              onSearch={(params) => fetchData({ ...searchValues, ...params, pageSize })}
               searchValues={searchValues}
               onBatchModifyDataset={async (payload) => {
                 try {
