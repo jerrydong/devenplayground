@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, message } from 'antd';
 import { debounce } from 'lodash';
 import { api } from '../../../services/api';
-import type { ImportVerbalRequest, DatasetInfo } from '../../../types/api';
+import type { DatasetInfo } from '../../../types/api';
 
 interface ImportVerbalModalProps {
   open: boolean;

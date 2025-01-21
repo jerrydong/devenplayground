@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Space } from 'antd';
 import { LinkOutlined, UserOutlined, DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
-import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest } from '../../types/api';
+import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest, AddModifyVerbalRequest } from '../../types/api';
 import type { TablePaginationConfig } from 'antd/es/table';
 import { BindDatasetModal } from './modals/BindDatasetModal';
 import { ModifyOwnerModal } from './modals/ModifyOwnerModal';
@@ -37,7 +37,7 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
   const [modifyOwnerModalOpen, setModifyOwnerModalOpen] = useState(false);
   const [importVerbalModalOpen, setImportVerbalModalOpen] = useState(false);
   const [addEditModalOpen, setAddEditModalOpen] = useState(false);
-  const [editingVerbal, setEditingVerbal] = useState<VerbalItem | undefined>();
+  const [editingVerbal, setEditingVerbal] = useState<AddModifyVerbalRequest | undefined>();
   const filterValues = searchValues;
 
   // Helper function to prepare batch request payload
@@ -97,7 +97,14 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
           <Button 
             type="link" 
             onClick={() => {
-              setEditingVerbal(record);
+              const transformedRecord = {
+                id: record.id,
+                name: record.name,
+                contentList: record.contentList,
+                ownerList: record.ownerList,
+                datasetList: record.datasetList.map(ds => ds.datasetId)
+              };
+              setEditingVerbal(transformedRecord);
               setAddEditModalOpen(true);
             }}
           >

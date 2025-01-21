@@ -3,7 +3,7 @@ import { Modal, Form, Input, Select, Button, Space, message } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { debounce } from 'lodash';
 import { api } from '../../../services/api';
-import type { AddModifyVerbalRequest, DatasetInfo, ContentItem } from '../../../types/api';
+import type { AddModifyVerbalRequest, DatasetInfo } from '../../../types/api';
 
 interface AddEditVerbalModalProps {
   open: boolean;
