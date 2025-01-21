@@ -12,14 +12,6 @@ export default defineConfig({
   server: {
     host: true,
     cors: true,
-    allowedHosts: ['verbal-management-app-tunnel-yi4u8hwt.devinapps.com'],
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
   },
   base: '/',
 })

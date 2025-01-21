@@ -4,7 +4,9 @@ import type {
   VerbalQueryResponse, 
   SuggestDatasetResponse,
   SuggestOwnerResponse,
-  BaseResponse 
+  BaseResponse,
+  VerbalNameValidResponse,
+  AddModifyVerbalRequest
 } from '../types/api';
 
 // Mock data
@@ -55,6 +57,37 @@ export const handlers = [
     const url = new URL(request.url);
     const page = Number(url.searchParams.get('page')) || 1;
     const pageSize = Number(url.searchParams.get('pageSize')) || 50;
+    const verbalName = url.searchParams.get('verbalName');
+    const verbalContent = url.searchParams.get('verbalContent');
+    const datasetName = url.searchParams.get('datasetName');
+    const creator = url.searchParams.get('creator');
+    const owner = url.searchParams.get('owner');
+
+    let filteredVerbals = [...mockVerbals];
+
+    // Apply filters
+    if (verbalName) {
+      filteredVerbals = filteredVerbals.filter(v => v.name.includes(verbalName));
+    }
+    if (verbalContent) {
+      filteredVerbals = filteredVerbals.filter(v => 
+        v.contentList.some(c => c.content.includes(verbalContent))
+      );
+    }
+    if (datasetName) {
+      filteredVerbals = filteredVerbals.filter(v => 
+        v.datasetList.some(d => d.datasetName.includes(datasetName))
+      );
+    }
+    if (creator) {
+      filteredVerbals = filteredVerbals.filter(v => v.creator.includes(creator));
+    }
+    if (owner) {
+      filteredVerbals = filteredVerbals.filter(v => 
+        v.ownerList.some(o => o.includes(owner))
+      );
+    }
+
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     
@@ -62,8 +95,8 @@ export const handlers = [
       code: 0,
       msg: 'success',
       data: {
-        verbalList: mockVerbals.slice(start, end),
-        total: mockVerbals.length,
+        verbalList: filteredVerbals.slice(start, end),
+        total: filteredVerbals.length,
       },
     };
     
@@ -123,12 +156,59 @@ export const handlers = [
   }),
 
   // Add/modify verbal
-  http.post('/api/:operation(verbalAdd|verbalModify)', () => {
-    const response: BaseResponse = {
-      code: 0,
-      msg: 'success',
-    };
-    
-    return HttpResponse.json(response);
+  http.post('/api/:operation(verbalAdd|verbalModify)', async ({ request }) => {
+    try {
+      const data = await request.json() as AddModifyVerbalRequest;
+      // Validate required fields
+      if (!data?.name || !data?.contentList?.length || !data?.ownerList?.length || !data?.datasetList?.length) {
+        return HttpResponse.json({
+          code: 1,
+          msg: '缺少必要字段',
+        } as BaseResponse);
+      }
+      
+      const response: BaseResponse = {
+        code: 0,
+        msg: 'success',
+      };
+      return HttpResponse.json(response);
+    } catch (error) {
+      return HttpResponse.json({
+        code: 1,
+        msg: '请求数据格式错误',
+      } as BaseResponse);
+    }
+  }),
+
+  // Check verbal name validity
+  http.get('/api/verbalIsNameValid', ({ request }) => {
+    try {
+      const url = new URL(request.url);
+      const verbalName = url.searchParams.get('verbalName');
+      
+      if (!verbalName) {
+        return HttpResponse.json({
+          code: 1,
+          msg: '话术名称不能为空',
+          data: false,
+        } as VerbalNameValidResponse);
+      }
+
+      // Mock validation logic: name should be unique
+      const isNameTaken = mockVerbals.some(verbal => verbal.name === verbalName);
+      
+      const response: VerbalNameValidResponse = {
+        code: 0,
+        msg: 'success',
+        data: !isNameTaken,
+      };
+      return HttpResponse.json(response);
+    } catch (error) {
+      return HttpResponse.json({
+        code: 1,
+        msg: '请求参数错误',
+        data: false,
+      } as VerbalNameValidResponse);
+    }
   }),
 ];
