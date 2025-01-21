@@ -3,6 +3,8 @@ import { Table, Button, Space } from 'antd';
 import { LinkOutlined, UserOutlined, DatabaseOutlined, PlusOutlined } from '@ant-design/icons';
 import type { VerbalItem, VerbalQueryRequest, BatchModifyRequest } from '../../types/api';
 import type { TablePaginationConfig } from 'antd/es/table';
+import { BindDatasetModal } from './modals/BindDatasetModal';
+import { ModifyOwnerModal } from './modals/ModifyOwnerModal';
 
 interface VerbalTableProps {
   loading?: boolean;
@@ -29,6 +31,8 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
 }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [crossPageSelected, setCrossPageSelected] = useState(false);
+  const [bindDatasetModalOpen, setBindDatasetModalOpen] = useState(false);
+  const [modifyOwnerModalOpen, setModifyOwnerModalOpen] = useState(false);
   const filterValues = searchValues;
 
   // Helper function to prepare batch request payload
@@ -138,7 +142,7 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
             disabled={selectedRowKeys.length === 0 && !crossPageSelected}
             type="primary"
             icon={<DatabaseOutlined />}
-            onClick={() => onBatchModifyDataset?.(prepareBatchPayload('dataset'))}
+            onClick={() => setBindDatasetModalOpen(true)}
           >
             绑定数据集
           </Button>
@@ -146,7 +150,7 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
             disabled={selectedRowKeys.length === 0 && !crossPageSelected}
             type="primary"
             icon={<UserOutlined />}
-            onClick={() => onBatchModifyOwner?.(prepareBatchPayload('owner'))}
+            onClick={() => setModifyOwnerModalOpen(true)}
           >
             修改负责人
           </Button>
@@ -173,6 +177,18 @@ export const VerbalTable: React.FC<VerbalTableProps> = ({
         loading={loading}
         rowKey="id"
         pagination={pagination}
+      />
+      <BindDatasetModal
+        open={bindDatasetModalOpen}
+        onClose={() => setBindDatasetModalOpen(false)}
+        onConfirm={onBatchModifyDataset!}
+        basePayload={prepareBatchPayload('dataset')}
+      />
+      <ModifyOwnerModal
+        open={modifyOwnerModalOpen}
+        onClose={() => setModifyOwnerModalOpen(false)}
+        onConfirm={onBatchModifyOwner!}
+        basePayload={prepareBatchPayload('owner')}
       />
     </div>
   );
