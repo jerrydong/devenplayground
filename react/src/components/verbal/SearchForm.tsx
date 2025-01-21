@@ -1,57 +1,37 @@
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '../ui/form';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { Form, Input, Button } from 'antd';
+import type { VerbalQueryRequest } from '../../types/api';
 
-const searchFormSchema = z.object({
-  verbalName: z.string().optional(),
-  verbalContent: z.string().optional(),
-  datasetName: z.string().optional(),
-  creator: z.string().optional(),
-  owner: z.string().optional(),
-});
-
-type SearchFormValues = z.infer<typeof searchFormSchema>;
-
-// This is just a skeleton component that we'll implement in the next step
 export const SearchForm = () => {
-  const form = useForm<SearchFormValues>({
-    resolver: zodResolver(searchFormSchema),
-    defaultValues: {
-      verbalName: '',
-      verbalContent: '',
-      datasetName: '',
-      creator: '',
-      owner: '',
-    },
-  });
+  const [form] = Form.useForm<VerbalQueryRequest>();
+
+  const onFinish = (values: VerbalQueryRequest) => {
+    // Will implement in the next step
+    console.log('Search form values:', values);
+  };
 
   return (
-    <Form {...form}>
-      <form className="flex gap-4 items-end">
-        <FormField
-          control={form.control}
-          name="verbalName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>话术名称</FormLabel>
-              <FormControl>
-                <Input placeholder="请输入" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        {/* Other form fields will be implemented in the next step */}
-        <Button type="submit" className="bg-blue-500">搜索</Button>
-      </form>
+    <Form form={form} onFinish={onFinish} layout="inline">
+      <Form.Item name="verbalName" label="话术名称">
+        <Input placeholder="请输入" />
+      </Form.Item>
+      <Form.Item name="verbalContent" label="话术内容">
+        <Input placeholder="请输入" />
+      </Form.Item>
+      <Form.Item name="datasetName" label="数据集">
+        <Input placeholder="请输入" />
+      </Form.Item>
+      <Form.Item name="creator" label="创建人">
+        <Input placeholder="请输入" />
+      </Form.Item>
+      <Form.Item name="owner" label="负责人">
+        <Input placeholder="请输入" />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          搜索
+        </Button>
+      </Form.Item>
     </Form>
   );
 };
