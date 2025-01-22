@@ -1,11 +1,18 @@
 import './App.css'
-import DataTable from './components/DataTable'
+import { PostageIncomeForm } from './components/PostageIncomeForm'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <DataTable />
-    </div>
+    <TooltipProvider>
+      <div className="min-h-screen bg-gray-100 p-4">
+        <PostageIncomeForm
+          onSubmit={(data) => {
+            console.log('Form submitted:', data);
+          }}
+        />
+      </div>
+    </TooltipProvider>
   )
 }
 
