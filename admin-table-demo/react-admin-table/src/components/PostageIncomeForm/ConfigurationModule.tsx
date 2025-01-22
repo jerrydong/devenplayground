@@ -1,20 +1,18 @@
 'use client';
 
-import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent } from '@/components/ui/tooltip';
 import { InfoIcon } from 'lucide-react';
 import {
   FULFILLMENT_NODES,
@@ -42,8 +40,9 @@ export function ConfigurationModule() {
             <FormItem>
               <FormLabel className="flex items-center space-x-2">
                 <span>邮资收入展示策略名称</span>
-                <Tooltip content="此名称仅在后台做配置管理使用、不会在骑手端展示">
+                <Tooltip>
                   <InfoIcon className="h-4 w-4 text-zinc-500" />
+                  <TooltipContent>此名称仅在后台做配置管理使用、不会在骑手端展示</TooltipContent>
                 </Tooltip>
               </FormLabel>
               <FormControl>
