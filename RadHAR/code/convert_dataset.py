@@ -4,6 +4,7 @@ Maps actions and converts range-Doppler images to point cloud format.
 """
 
 import os
+import shutil
 import numpy as np
 from tqdm import tqdm
 from PIL import Image
@@ -24,23 +25,45 @@ def convert_dataset(src_dir, dst_dir):
     """
     # Map actions to RadHAR format
     action_map = {
-        'boxing': 'boxing',
-        'jump_up': 'jump',
-        'squat_and_stand': 'squats',
-        'walk_in_place': 'walk'
+        'c1': 'boxing',      # Boxing files start with c1
+        'c2': 'jump',        # Jump files start with c2
+        'c3': 'squats',      # Squats files start with c3
+        'c4': 'walk'         # Walk files start with c4
     }
     
     # Create destination directory
     os.makedirs(dst_dir, exist_ok=True)
     
-    # Process each action type
-    for action in tqdm(os.listdir(src_dir), desc='Converting actions'):
-        action_base = action.split('_')[0]
-        if action_base not in action_map:
+    # Create action directories
+    for action in action_map.values():
+        os.makedirs(os.path.join(dst_dir, action), exist_ok=True)
+    
+    # Process all jpg files
+    jpg_files = []
+    for root, _, files in os.walk(src_dir):
+        for file in files:
+            if file.endswith('.jpg'):
+                jpg_files.append(os.path.join(root, file))
+    
+    # Process each file
+    for file_path in tqdm(jpg_files, desc='Converting actions'):
+        # Extract action from filename pattern (e.g., c1p1n1.jpg)
+        filename = os.path.basename(file_path)
+        action_prefix = filename[:2]  # Get c1, c2, c3, c4
+        if action_prefix not in action_map:
             continue
+            
+        # Map to RadHAR action name
+        radhar_action = action_map[action_prefix]
+        dst_path = os.path.join(dst_dir, radhar_action)
+        os.makedirs(dst_path, exist_ok=True)
+        
+        # Copy and rename file
+        dst_file = os.path.join(dst_path, os.path.basename(file_path))
+        shutil.copy2(file_path, dst_file)
         
         # Map to RadHAR action name
-        radhar_action = action_map[action_base]
+        radhar_action = action_map[action_prefix]
         src_path = os.path.join(src_dir, action)
         dst_path = os.path.join(dst_dir, radhar_action)
         os.makedirs(dst_path, exist_ok=True)

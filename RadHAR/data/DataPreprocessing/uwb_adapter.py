@@ -12,7 +12,7 @@ def extract_features(image):
     Args:
         image: np.array of shape (H, W, 3) containing range-Doppler image
     Returns:
-        points: np.array of shape (N, 5) containing [x, y, z, velocity, intensity]
+        points: np.array of shape (4002, 5) containing [x, y, z, velocity, intensity]
     """
     # Image dimensions map to physical space
     range_resolution = 0.1  # meters per pixel
@@ -29,19 +29,23 @@ def extract_features(image):
     intensity = np.mean(image, axis=2)
     
     # Create point cloud
-    mask = intensity > np.mean(intensity)  # Only keep points above mean intensity
-    points = []
-    for i in range(image.shape[0]):
-        for j in range(image.shape[1]):
-            if mask[i, j]:
-                x = X[i, j]  # Range
-                y = Y[i, j]  # Velocity
-                z = intensity[i, j] / np.max(intensity)  # Normalized height
-                velocity = Y[i, j]  # Use Doppler velocity
-                point_intensity = intensity[i, j]
-                points.append([x, y, z, velocity, point_intensity])
+    # Sort points by intensity and take top 4002 points
+    flat_intensity = intensity.flatten()
+    sorted_indices = np.argsort(flat_intensity)[-4002:]  # Get indices of top 4002 points
     
-    return np.array(points) if points else np.zeros((0, 5))
+    # Create points array
+    points = np.zeros((4002, 5))
+    for idx, flat_idx in enumerate(sorted_indices):
+        i, j = np.unravel_index(flat_idx, intensity.shape)
+        points[idx] = [
+            X[i, j],  # Range
+            Y[i, j],  # Velocity
+            intensity[i, j] / np.max(intensity),  # Normalized height
+            Y[i, j],  # Use Doppler velocity
+            intensity[i, j]  # Point intensity
+        ]
+    
+    return points
 
 def convert_to_point_cloud(image_path):
     """

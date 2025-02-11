@@ -174,7 +174,7 @@ def process_all_actions(data_dir, output_dir, data_type='mmwave'):
                         plot_3d_doppler(None, None, processed_data, action_type, data_type='uwb', save_path=save_path_doppler)
                         
                         # Convert to point cloud and save visualization
-                        from ..data.DataPreprocessing.uwb_adapter import convert_to_point_cloud
+                        convert_to_point_cloud = get_uwb_adapter()
                         points = convert_to_point_cloud(file_path)
                         save_path_cloud = os.path.join(action_output_dir, f'{file_name[:-4]}_cloud.png')
                         plot_point_cloud(points, action_type, data_type='uwb', save_path=save_path_cloud)
