@@ -81,7 +81,9 @@ class RadarDataset(Dataset):
         if self.transform is not None:
             data = self.transform(data)
         
-        return data, sample['label']
+        # Convert label to tensor
+        label = torch.tensor(sample['label'], dtype=torch.long)
+        return data, label
 
 class RadarDataAugmentation:
     """Data augmentation for UWB radar data."""
