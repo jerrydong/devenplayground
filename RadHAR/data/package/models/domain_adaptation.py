@@ -80,6 +80,15 @@ class MultiScaleDomainAdapter(nn.Module):
             ) for dim in self.feature_dims
         ])
         
+        # Classifier for UWB-only mode
+        total_features = sum(self.feature_dims)
+        self.classifier = nn.Sequential(
+            nn.Linear(total_features, config.hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Linear(config.hidden_dim, config.num_classes)
+        )
+        
     def compute_consistency_loss(self, radar_features, mapped_rgb, rgb_features, mapped_radar):
         """Compute cycle consistency loss for semantic mapping"""
         consistency_losses = []
