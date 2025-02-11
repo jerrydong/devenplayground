@@ -73,13 +73,11 @@ class Trainer:
             
             # Forward pass
             self.optimizer.zero_grad()
-            features = self.model(data)
-            domain_features = self.domain_adapter(features)
+            features = self.model(data)  # List of feature maps
+            output = self.domain_adapter(features)  # UWB-only mode returns features for classification
             
-            # Calculate losses
-            task_loss = self.criterion(domain_features, target)
-            domain_loss = self.domain_adapter.compute_loss()
-            total_batch_loss = task_loss + self.config.domain_adaptation_weight * domain_loss
+            # Calculate loss (UWB-only mode)
+            total_batch_loss = self.criterion(output, target)
             
             # Backward pass
             total_batch_loss.backward()
@@ -116,15 +114,15 @@ class Trainer:
                 data, target = data.to(self.device), target.to(self.device)
                 
                 # Forward pass
-                features = self.model(data)
-                domain_features = self.domain_adapter(features)
+                features = self.model(data)  # List of feature maps
+                output = self.domain_adapter(features)  # UWB-only mode
                 
                 # Calculate loss
-                loss = self.criterion(domain_features, target)
+                loss = self.criterion(output, target)
                 val_loss += loss.item()
                 
                 # Calculate accuracy
-                pred = domain_features.argmax(dim=1)
+                pred = output.argmax(dim=1)
                 correct += pred.eq(target).sum().item()
                 total += target.size(0)
         
@@ -198,10 +196,9 @@ def main():
     # Initialize trainer
     trainer = Trainer(config, device)
     
-    # TODO: Initialize data loaders
-    # This will be implemented in the data loading pipeline
-    train_loader = None
-    val_loader = None
+    # Initialize data loaders
+    from data_loader import create_dataloaders
+    train_loader, val_loader = create_dataloaders(config)
     
     # Start training
     trainer.train(train_loader, val_loader)
