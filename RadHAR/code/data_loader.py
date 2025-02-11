@@ -12,14 +12,34 @@ from data.package.configs.model_config import Config
 
 class RadarDataset(Dataset):
     """Dataset class for UWB radar data."""
-    def __init__(self, data_dir, transform=None, is_training=True):
+    def __init__(self, data_dir, transform=None, is_training=True, samples=None):
         self.data_dir = data_dir
         self.transform = transform
         self.is_training = is_training
         self.samples = []
         self.action_to_idx = {}
-        self.preprocess_data()
         
+        if samples is not None:
+            self.init_from_samples(samples)
+        else:
+            self.preprocess_data()
+    
+    def init_from_samples(self, samples):
+        """Initialize dataset from pre-split samples list."""
+        # Create action to index mapping from provided samples
+        actions = sorted(list(set(action for _, action in samples)))
+        self.action_to_idx = {action: idx for idx, action in enumerate(actions)}
+        
+        # Store samples
+        self.samples = [
+            {
+                'path': path,
+                'action': action,
+                'label': self.action_to_idx[action]
+            }
+            for path, action in samples
+        ]
+    
     def preprocess_data(self):
         """Load and preprocess all data samples."""
         # Create action to index mapping
@@ -81,17 +101,36 @@ def create_dataloaders(config):
     # Setup data augmentation
     augmentation = RadarDataAugmentation(config)
     
+    # Create datasets with train/val split from Train directory
+    train_dir = os.path.join(config.data_dir, 'Train')
+    all_samples = []
+    for action in os.listdir(train_dir):
+        action_path = os.path.join(train_dir, action)
+        if os.path.isdir(action_path):
+            samples = [os.path.join(action_path, f) for f in os.listdir(action_path) if f.endswith('.jpg')]
+            all_samples.extend([(s, action) for s in samples])
+    
+    # Random split 80/20
+    np.random.seed(42)
+    np.random.shuffle(all_samples)
+    split_idx = int(len(all_samples) * 0.8)
+    
+    train_samples = all_samples[:split_idx]
+    val_samples = all_samples[split_idx:]
+    
     # Create datasets
     train_dataset = RadarDataset(
-        os.path.join(config.data_dir, 'Train'),
+        train_dir,
         transform=augmentation.get_train_transform(),
-        is_training=True
+        is_training=True,
+        samples=train_samples
     )
     
     val_dataset = RadarDataset(
-        os.path.join(config.data_dir, 'Val'),
+        train_dir,
         transform=augmentation.get_val_transform(),
-        is_training=False
+        is_training=False,
+        samples=val_samples
     )
     
     # Create dataloaders
