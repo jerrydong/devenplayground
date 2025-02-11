@@ -66,10 +66,16 @@ class RadarDataset(Dataset):
         sample = self.samples[idx]
         
         # Load and preprocess UWB data
-        data = preprocess_uwb_data(sample['path'])
+        data = preprocess_uwb_data(sample['path'])  # Shape: [1, 10, 32, 32]
+        
+        # Repeat the single channel 3 times to match input_channels
+        data = np.repeat(data, 3, axis=0)  # Shape: [3, 10, 32, 32]
         
         # Convert to tensor
         data = torch.FloatTensor(data)
+        
+        # Reshape to match model input: [input_channels, range_bins, frames]
+        data = data.permute(0, 2, 3, 1)  # Shape: [3, 32, 32, 10]
         
         # Apply transforms if any
         if self.transform is not None:
