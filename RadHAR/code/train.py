@@ -85,7 +85,7 @@ class Trainer:
             
             # Update metrics
             total_loss += total_batch_loss.item()
-            pred = domain_features.argmax(dim=1)
+            pred = output.argmax(dim=1)
             correct += pred.eq(target).sum().item()
             total += target.size(0)
             
