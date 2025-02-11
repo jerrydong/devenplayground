@@ -100,8 +100,9 @@ class MultiScaleDomainAdapter(nn.Module):
         """
         if rgb_features is None:
             # UWB-only training mode
-            # Use the first feature map for classification
-            return radar_features[0]
+            # Concatenate all feature maps and pass through classifier
+            features = torch.cat([f.mean([-2, -1]) for f in radar_features], dim=1)
+            return self.classifier(features)
         
         # Full domain adaptation mode with RGB features
         # Feature alignment
