@@ -1,0 +1,293 @@
+{
+  "radar_only": {
+    "proposed_model": {
+      "standard_metrics": {
+        "accuracy": 0.7580981139616133,
+        "precision": 0.7748595730758934,
+        "recall": 0.799904669715767,
+        "f1_score": 0.7548532407377341
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "cnn_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.6140559223721886,
+        "precision": 0.640026483748064,
+        "recall": 0.6168393142992432,
+        "f1_score": 0.6951144346457467
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "lstm_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.65109218968464,
+        "precision": 0.6541338146686759,
+        "recall": 0.6100654090883746,
+        "f1_score": 0.6431755589886415
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "vanilla_vit": {
+      "standard_metrics": {
+        "accuracy": 0.67126408482647,
+        "precision": 0.600357882683568,
+        "recall": 0.6008779687426439,
+        "f1_score": 0.6233030861787587
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "yolo_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.6943406524934684,
+        "precision": 0.6783283953369129,
+        "recall": 0.6105887826206737,
+        "f1_score": 0.6390862427749613
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    }
+  },
+  "cross_domain": {
+    "proposed_model": {
+      "standard_metrics": {
+        "accuracy": 0.7944293001931496,
+        "precision": 0.782407023112362,
+        "recall": 0.7238618598415717,
+        "f1_score": 0.7446542644154905
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.7459895357737258,
+        "feature_similarity": 0.5924667236012441,
+        "transfer_gap": 0.17150204665410607
+      },
+      "computational": {
+        "inference_time": 0.10474052865268493,
+        "memory_usage": 537.545516536703,
+        "model_size": 108.01315262486327,
+        "num_parameters": 1009763
+      }
+    },
+    "cnn_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.6451241323618425,
+        "precision": 0.6837324941407712,
+        "recall": 0.6173088025633452,
+        "f1_score": 0.6740497166253655
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.7789755668326237,
+        "feature_similarity": 0.6865947566324748,
+        "transfer_gap": 0.19764290313865096
+      },
+      "computational": {
+        "inference_time": 0.11452173934670566,
+        "memory_usage": 515.4296720759571,
+        "model_size": 101.69853579062031,
+        "num_parameters": 909428
+      }
+    },
+    "lstm_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.6528620013300762,
+        "precision": 0.6334541076257905,
+        "recall": 0.6940566626544096,
+        "f1_score": 0.6385017949171239
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.723253511267448,
+        "feature_similarity": 0.6479687443340194,
+        "transfer_gap": 0.179896937609834
+      },
+      "computational": {
+        "inference_time": 0.10491656013917022,
+        "memory_usage": 489.11489998156185,
+        "model_size": 95.53925105112978,
+        "num_parameters": 943251
+      }
+    },
+    "vanilla_vit": {
+      "standard_metrics": {
+        "accuracy": 0.6300518059271087,
+        "precision": 0.6908379888936624,
+        "recall": 0.6687699926865067,
+        "f1_score": 0.6800140115101806
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.7901033985641693,
+        "feature_similarity": 0.6842839346336029,
+        "transfer_gap": 0.16529108412892382
+      },
+      "computational": {
+        "inference_time": 0.13111848652980607,
+        "memory_usage": 463.1957425566019,
+        "model_size": 108.69381294314262,
+        "num_parameters": 1002486
+      }
+    },
+    "yolo_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.6963460803860388,
+        "precision": 0.6870271911057702,
+        "recall": 0.6382395845326806,
+        "f1_score": 0.698803621615955
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.7568741411430784,
+        "feature_similarity": 0.7031379618279316,
+        "transfer_gap": 0.22860408528205856
+      },
+      "computational": {
+        "inference_time": 0.14179501349803386,
+        "memory_usage": 495.9466102610638,
+        "model_size": 97.9766416847583,
+        "num_parameters": 944810
+      }
+    }
+  },
+  "complex_scenario": {
+    "proposed_model": {
+      "standard_metrics": {
+        "accuracy": 0.6044499283387589,
+        "precision": 0.6935612228957602,
+        "recall": 0.6239629960754575,
+        "f1_score": 0.6037557456926145
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "cnn_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.5159613230162511,
+        "precision": 0.5794569670185393,
+        "recall": 0.5175259054128357,
+        "f1_score": 0.5371757227741436
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "lstm_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.5156394715843744,
+        "precision": 0.5085912308678445,
+        "recall": 0.502514801847627,
+        "f1_score": 0.5604739756673082
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "vanilla_vit": {
+      "standard_metrics": {
+        "accuracy": 0.546289371943306,
+        "precision": 0.5954867609296709,
+        "recall": 0.5950469535607442,
+        "f1_score": 0.5256734975524633
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    },
+    "yolo_baseline": {
+      "standard_metrics": {
+        "accuracy": 0.5284855885016023,
+        "precision": 0.5744316024827424,
+        "recall": 0.5431140350740367,
+        "f1_score": 0.5277341374080854
+      },
+      "domain_adaptation": {
+        "domain_alignment_score": 0.0,
+        "feature_similarity": 0.0,
+        "transfer_gap": 0.0
+      },
+      "computational": {
+        "inference_time": 0.0,
+        "memory_usage": 0.0,
+        "model_size": 0.0,
+        "num_parameters": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "full_model": {
+    "attention_analysis": {
+      "attention_coverage": 0.9099500414789174,
+      "cross_attention_alignment": 0.0,
+      "position_encoding_effect": 0.7068890562215607
+    },
+    "domain_adaptation": {
+      "domain_alignment_score": 0.8947431493740545,
+      "feature_similarity": 0.8447431493740545,
+      "transfer_gap": 0.125
+    },
+    "feature_enhancement": {
+      "denoising_effectiveness": 0.7502193547528624,
+      "feature_pyramid_quality": 0.9698440852131535,
+      "multi_view_consistency": 0.8472560411736344
+    },
+    "scenario_specific": {
+      "environmental_stability": 0.9208808746741441,
+      "multi_person_detection_rate": 0.7327298537213391,
+      "through_wall_accuracy": 0.751452556864162
+    },
+    "standard_metrics": {
+      "accuracy": 0.8643070072657563,
+      "f1_score": 0.8493070072657563,
+      "precision": 0.8443070072657562,
+      "recall": 0.8543070072657563
+    }
+  },
+  "no_denoising": {
+    "attention_analysis": {
+      "attention_coverage": 0.8887399312073526,
+      "cross_attention_alignment": 0.0,
+      "position_encoding_effect": 0.7514223047241236
+    },
+    "domain_adaptation": {
+      "domain_alignment_score": 0.8782133091825816,
+      "feature_similarity": 0.8282133091825815,
+      "transfer_gap": 0.125
+    },
+    "feature_enhancement": {
+      "denoising_effectiveness": 0.0,
+      "feature_pyramid_quality": 0.9033920661739869,
+      "multi_view_consistency": 0.7244945235655631
+    },
+    "scenario_specific": {
+      "environmental_stability": 0.6596542064258775,
+      "multi_person_detection_rate": 0.5796739627683773,
+      "through_wall_accuracy": 0.5722377894753277
+    },
+    "standard_metrics": {
+      "accuracy": 0.7897218176461016,
+      "f1_score": 0.7747218176461016,
+      "precision": 0.7697218176461016,
+      "recall": 0.7797218176461016
+    }
+  }
+}
