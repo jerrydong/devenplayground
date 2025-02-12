@@ -28,4 +28,4 @@ class Config:
     learning_rate = 1e-4
     num_epochs = 100
     weight_decay = 1e-4
-    data_dir = '/home/ubuntu/attachments/f12fad0d-3ad2-429e-90f0-d13906e24f52/RadHAR_complete_final/RadHAR/data/Data'  # Base directory for data
+    data_dir = 'data/converted_dataset'  # Base directory for converted dataset
